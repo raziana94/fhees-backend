@@ -1,4 +1,4 @@
-name: Deploy Node.js API to Azure App Service
+name: Deploy Node.js API to Azure Web App
 
 on:
   push:
@@ -10,23 +10,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout source code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: '20'
 
       - name: Install dependencies
         run: npm install
 
-      - name: Zip for deployment
-        run: zip -r app.zip .
-
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v2
+      - name: Build and deploy
+        uses: azure/webapps-deploy@v3
         with:
-          app-name: "fhees-api"
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
-          package: app.zip
+          app-name: fhees-api
+          publish-profile: ${{ secrets.AZUREWEBAPP_PUBLISH_PROFILE }}
+          package: .
